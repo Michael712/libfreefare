@@ -231,7 +231,8 @@ mifare_desfire_taste(nfc_device *device, nfc_target target)
     return target.nm.nmt == NMT_ISO14443A &&
 	   target.nti.nai.btSak == 0x20 &&
 	   target.nti.nai.szAtsLen >= 5 &&
-	   memcmp(target.nti.nai.abtAts, "\x75\x77\x81\x02", 4) == 0;
+	   (memcmp(target.nti.nai.abtAts, "\x75\x77\x81\x02", 4) == 0 ||
+          memcmp(target.nti.nai.abtAts, "\x75\x00\x91\x02", 4) == 0);
 }
 
 
@@ -1522,9 +1523,10 @@ read_data(FreefareTag tag, uint8_t command, uint8_t file_no, off_t offset, size_
     int record_size = 1;
 
     struct mifare_desfire_file_settings settings;
-    int r = mifare_desfire_get_file_settings(tag, file_no, &settings);
-    if (r < 0)
-	return r;
+    //int r = mifare_desfire_get_file_settings(tag, file_no, &settings);
+    //if (r < 0) {
+	//return r;
+    //}
 
     switch (settings.file_type) {
     case MDFT_STANDARD_DATA_FILE:
